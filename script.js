@@ -44,7 +44,10 @@ overlay.addEventListener('click', closeMenu);
 
 // Close on link click
 navLinks.querySelectorAll('a').forEach(link => {
-  link.addEventListener('click', closeMenu);
+  link.addEventListener('click', () => {
+    closeMenu();
+    resetHamburger();
+  });
 });
 
 // ── Active Nav Link on Scroll ──────────────────────
@@ -137,22 +140,26 @@ const statsObserver = new IntersectionObserver(entries => {
 statNums.forEach(el => statsObserver.observe(el));
 
 // ── Hamburger Animation ───────────────────────────
-hamburger.addEventListener('click', () => {
-  const spans = hamburger.querySelectorAll('span');
-  if (navLinks.classList.contains('open')) {
-    spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
-    spans[1].style.opacity = '0';
-    spans[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
-  } else {
-    spans[0].style.transform = '';
-    spans[1].style.opacity = '';
-    spans[2].style.transform = '';
-  }
-});
+const spans = hamburger.querySelectorAll('span');
 
-overlay.addEventListener('click', () => {
-  const spans = hamburger.querySelectorAll('span');
+function setHamburgerOpen() {
+  spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+  spans[1].style.opacity = '0';
+  spans[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
+}
+
+function resetHamburger() {
   spans[0].style.transform = '';
   spans[1].style.opacity = '';
   spans[2].style.transform = '';
+}
+
+hamburger.addEventListener('click', () => {
+  if (navLinks.classList.contains('open')) {
+    setHamburgerOpen();
+  } else {
+    resetHamburger();
+  }
 });
+
+overlay.addEventListener('click', resetHamburger);
